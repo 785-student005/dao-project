@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import la.bean.ItemBean;
 import la.dao.DAOException;
 import la.dao.ItemDAO;
@@ -23,7 +22,7 @@ public class ItemServlet extends HttpServlet {
 
 		// モデルを使って全商品を取得する
 		try {
-			ItemDAO dao = new ItemDAO();
+			ItemDAO dao = new ItemDAO(); // daoにデータベースへのアクセスをやらせるためにインスタンス化
 			List<ItemBean> list = dao.findAll();
 			// Listをリクエストスコープに入れてJSPへフォーワードする
 			request.setAttribute("items", list);

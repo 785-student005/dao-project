@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import la.bean.ItemBean;
 import la.dao.DAOException;
 import la.dao.ItemDAO2;
@@ -20,6 +19,7 @@ public class ItemServlet2 extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
+			// リクエストパラメータの文字子コード（エンコーディング）を設定
 			request.setCharacterEncoding("UTF-8");
 			// パラメータの解析
 			String action = request.getParameter("action");
@@ -58,12 +58,88 @@ public class ItemServlet2 extends HttpServlet {
 			}
 			// searchは検索
 			else if (action.equals("search")) {
-				int price = Integer.parseInt(request.getParameter("price"));
-				List<ItemBean>list = dao.findByPrice(price);
-				// Listをリクエストスコープに入れてJSPへフォーワードする
-				request.setAttribute("items", list);
-				gotoPage(request, response, "/showItem2.jsp");
+				String priceMinSt = request.getParameter("priceMin");
+				String priceMaxSt = request.getParameter("price");
+				
+
+				String name2 = request.getParameter("name2");
+				
+					
+				
+				if(name2 != "") {
+					if (priceMinSt != "" && priceMaxSt != "") { // 両方に値あり
+						int priceMin = Integer.parseInt(request.getParameter("priceMin"));
+						int price = Integer.parseInt(request.getParameter("price"));
+						List<ItemBean>list = dao.findByPrice5(priceMin, price, name2);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else if (priceMinSt != "" && priceMaxSt == "") { //　最小値のみ値あり
+						int priceMin = Integer.parseInt(request.getParameter("priceMin"));
+						List<ItemBean>list = dao.findByPrice6(priceMin, name2);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else if (priceMinSt == "" && priceMaxSt != ""){ // 最大値のみ値あり
+						int price = Integer.parseInt(request.getParameter("price"));
+						List<ItemBean>list = dao.findByPrice4(price, name2);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else if (priceMinSt == "" && priceMaxSt == ""){
+						List<ItemBean>list = dao.findByPrice7(name2);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else {
+						return;
+					}
+				} else if (name2 == ""){
+					if (priceMinSt != "" && priceMaxSt != "") { // 両方に値あり
+						int priceMin = Integer.parseInt(request.getParameter("priceMin"));
+						int price = Integer.parseInt(request.getParameter("price"));
+						List<ItemBean>list = dao.findByPrice2(priceMin, price);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else if (priceMinSt != "" && priceMaxSt == "") { //　最小値のみ値あり
+						int priceMin = Integer.parseInt(request.getParameter("priceMin"));
+						List<ItemBean>list = dao.findByPrice3(priceMin);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else if (priceMinSt == "" && priceMaxSt != ""){ // 最大値のみ値あり
+						int price = Integer.parseInt(request.getParameter("price"));
+						List<ItemBean>list = dao.findByPrice(price);
+						// Listをリクエストスコープに入れてJSPへフォーワードする
+						request.setAttribute("items", list);
+						gotoPage(request, response, "/showItem2.jsp");
+					} else {
+						return;
+					}
+				}
+				
 			}
+			
+//			else if (action.equals("search")) {
+//				int minPrice = 0;
+//				int maxPrice = 0;
+//				try{
+//					String priceMinSt = request.getParameter("priceMin");
+//					String priceMaxSt = request.getParameter("price");
+//					minPrice = Integer.parseInt(request.getParameter(priceMinSt));
+//					maxPrice = Integer.parseInt(request.getParameter(priceMaxSt));
+//				}catch(NumberFormatException e) {
+//					e.printStackTrace();
+//					
+//				}
+//				List<ItemBean>list = dao.findByPrice2(minPrice, maxPrice);
+//				// Listをリクエストスコープに入れてJSPへフォーワードする
+//				request.setAttribute("items", list);
+//				gotoPage(request, response, "/showItem2.jsp");
+//			} 
+			
+			
 			// deleteは削除
 			else if (action.equals("delete")) {
 				int code = Integer.parseInt(request.getParameter("code"));

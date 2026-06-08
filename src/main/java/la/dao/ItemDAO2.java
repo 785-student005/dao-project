@@ -107,7 +107,7 @@ public class ItemDAO2 {
 
 	public List<ItemBean> findByPrice(int lePrice) throws DAOException {
 		// SQL文の作成
-		String sql = "SELECT * FROM item WHERE price <= ?";
+		String sql = "SELECT * FROM item WHERE price <= ? ";
 		
 		try (// データベースへの接続
 			 Connection con = DriverManager.getConnection(url, user, pass);
@@ -138,6 +138,217 @@ public class ItemDAO2 {
 			throw new DAOException("レコードの操作に失敗しました。");
 		}
 	}
+	
+	public List<ItemBean> findByPrice2(int priceMin, int lePrice) throws DAOException {
+		// SQL文の作成
+		String sql = "SELECT * FROM item WHERE price BETWEEN ? AND ?" ;
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 値段のセット
+			st.setInt(1, priceMin);
+			st.setInt(2, lePrice);
+			
+			try (// SQLの実行
+				 ResultSet rs = st.executeQuery();) {
+				// 結果の取得
+				List<ItemBean> list = new ArrayList<ItemBean>();
+				while (rs.next()) {
+					int code = rs.getInt("code");
+					String name = rs.getString("name");
+					int price = rs.getInt("price");
+					ItemBean bean = new ItemBean(code, name, price);
+					list.add(bean);
+				}
+				// 商品一覧をListとして返す
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("レコードの操作に失敗しました。");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		}
+	}
+	
+	public List<ItemBean> findByPrice3(int lePrice) throws DAOException {
+		// SQL文の作成
+		String sql = "SELECT * FROM item WHERE price >= ?";
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 値段のセット
+			st.setInt(1, lePrice);
+			
+			try (// SQLの実行
+				 ResultSet rs = st.executeQuery();) {
+				// 結果の取得
+				List<ItemBean> list = new ArrayList<ItemBean>();
+				while (rs.next()) {
+					int code = rs.getInt("code");
+					String name = rs.getString("name");
+					int price = rs.getInt("price");
+					ItemBean bean = new ItemBean(code, name, price);
+					list.add(bean);
+				}
+				// 商品一覧をListとして返す
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("レコードの操作に失敗しました。");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		}
+	}
+	
+	public List<ItemBean> findByPrice4(int lePrice, String name2) throws DAOException {
+		// SQL文の作成
+		String sql = "SELECT * FROM item WHERE price <= ? AND name LIKE ?";
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 値段のセット
+			st.setInt(1, lePrice);
+			st.setString(2, "%" + name2 + "%");
+			
+			try (// SQLの実行
+				 ResultSet rs = st.executeQuery();) {
+				// 結果の取得
+				List<ItemBean> list = new ArrayList<ItemBean>();
+				while (rs.next()) {
+					int code = rs.getInt("code");
+					String name = rs.getString("name");
+					int price = rs.getInt("price");
+					ItemBean bean = new ItemBean(code, name, price);
+					list.add(bean);
+				}
+				// 商品一覧をListとして返す
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("レコードの操作に失敗しました。");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		}
+	}
+	
+	public List<ItemBean> findByPrice5(int priceMin, int lePrice, String name2) throws DAOException {
+		// SQL文の作成
+		String sql = "SELECT * FROM item WHERE name LIKE ? AND price BETWEEN ? AND ?" ;
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 値段のセット
+			st.setString(1, "%" + name2 + "%");
+			st.setInt(2, priceMin);
+			st.setInt(3, lePrice);
+			
+			try (// SQLの実行
+				 ResultSet rs = st.executeQuery();) {
+				// 結果の取得
+				List<ItemBean> list = new ArrayList<ItemBean>();
+				while (rs.next()) {
+					int code = rs.getInt("code");
+					String name = rs.getString("name");
+					int price = rs.getInt("price");
+					ItemBean bean = new ItemBean(code, name, price);
+					list.add(bean);
+				}
+				// 商品一覧をListとして返す
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("レコードの操作に失敗しました。");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		}
+	}
+	
+	public List<ItemBean> findByPrice6(int lePrice, String name2) throws DAOException {
+		// SQL文の作成
+		String sql = "SELECT * FROM item WHERE name LIKE ? AND price >= ?";
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 値段のセット
+			st.setString(1, "%" + name2 + "%");
+			st.setInt(2, lePrice);
+			
+			try (// SQLの実行
+				 ResultSet rs = st.executeQuery();) {
+				// 結果の取得
+				List<ItemBean> list = new ArrayList<ItemBean>();
+				while (rs.next()) {
+					int code = rs.getInt("code");
+					String name = rs.getString("name");
+					int price = rs.getInt("price");
+					ItemBean bean = new ItemBean(code, name, price);
+					list.add(bean);
+				}
+				// 商品一覧をListとして返す
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("レコードの操作に失敗しました。");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		}
+	}
+	
+	public List<ItemBean> findByPrice7(String name2) throws DAOException {
+		// SQL文の作成
+		String sql = "SELECT * FROM item WHERE name LIKE ?" ;
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 値段のセット
+			st.setString(1, "%" + name2 + "%");
+			
+			try (// SQLの実行
+				 ResultSet rs = st.executeQuery();) {
+				// 結果の取得
+				List<ItemBean> list = new ArrayList<ItemBean>();
+				while (rs.next()) {
+					int code = rs.getInt("code");
+					String name = rs.getString("name");
+					int price = rs.getInt("price");
+					ItemBean bean = new ItemBean(code, name, price);
+					list.add(bean);
+				}
+				// 商品一覧をListとして返す
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("レコードの操作に失敗しました。");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		}
+	}
+	
+	
 
 	public int deleteByPrimaryKey(int key) throws DAOException {
 		// SQL文の作成

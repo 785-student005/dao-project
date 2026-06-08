@@ -35,9 +35,9 @@ public class ItemDAO {
 			 // PreparedStatementオブジェクトの取得
 			 PreparedStatement st = con.prepareStatement(sql);
 			 // SQLの実行
-			 ResultSet rs = st.executeQuery();) {
+			 ResultSet rs = st.executeQuery();) { //resultset開きっぱなしだと、データベースを開きっぱなしで結果を連れまわすことに（結果を変数に入れる
 			// 結果の取得
-			List<ItemBean> list = new ArrayList<ItemBean>();
+			List<ItemBean> list = new ArrayList<ItemBean>(); // アレーリストはlist（インターフェース）の実装クラス　仕様を変えるときにnew以降だけを変えればよくなる
 			while (rs.next()) {
 				int code = rs.getInt("code");
 				String name = rs.getString("name");

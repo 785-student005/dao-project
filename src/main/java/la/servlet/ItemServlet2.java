@@ -35,9 +35,12 @@ public class ItemServlet2 extends HttpServlet {
 			} 
 			// addは追加
 			else if (action.equals("add")) {
+				// リクエストパラメータを取得
 				String name = request.getParameter("name");
+				// リクエストパラメータのデータ型を変換
 				int price = Integer.parseInt(request.getParameter("price"));
-				dao.addItem(name, price);
+				// ItemDAO.addItemメソッドを呼び出して実行
+				dao.addItem(name, price); // 戻り値を再利用しない場合は、戻り値を受け取る必要はない
 				// 追加後、全レコード表示
 				List<ItemBean> list = dao.findAll();
 				// Listをリクエストスコープに入れてJSPへフォーワードする
@@ -47,6 +50,15 @@ public class ItemServlet2 extends HttpServlet {
 			// sortはソート
 			else if (action.equals("sort")) {
 				String key = request.getParameter("key");
+				
+				HttpSession session = request.getSession();
+				
+				String name = (String)session.getAttribute("name");
+				String minPrice = (String)session.getAttribute("minPrice");
+				String maxPrice = (String)session.getAttribute("maxPrice");
+				
+	//			List<ItemBean> list = dao.findByNameAndPrice(name, minPrice, maxPrice, null);
+				
 				List<ItemBean> list;
 				if(key.equals("price_asc")) {
 					list = dao.sortPrice(true);
@@ -154,10 +166,23 @@ public class ItemServlet2 extends HttpServlet {
 				// Listをリクエストスコープに入れてJSPへフォーワードする
 				request.setAttribute("items", list);
 				gotoPage(request, response, "/showItem2.jsp");
+			} 
+			
+			else if (action.equals("update")) {
+				// リクエストパラメータを取得　取得したパラメータをint型へ　itemDAOで更新を実行
+				int code = Integer.parseInt(request.getParameter("code"));
+				int price = Integer.parseInt(request.getParameter("price"));
+				dao.updateByPrimaryKey(code, price);
+				// 削除後、全レコード表示
+				List<ItemBean> list = dao.findAll();
+				// Listをリクエストスコープに入れてJSPへフォーワードする
+				request.setAttribute("items", list);
+				gotoPage(request, response, "/showItem2.jsp");
 			} else {
 				request.setAttribute("message", "正しく操作してください。");
 				gotoPage(request, response, "/errInternal.jsp");
 			}
+			
 		} catch (DAOException e) {
 			e.printStackTrace();
 			request.setAttribute("message", "内部エラーが発生しました。");

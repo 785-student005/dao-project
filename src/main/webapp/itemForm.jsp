@@ -21,3 +21,10 @@
 	番の商品を<button>削除</button>
 	<input type="hidden" name="action" value="delete">
 </form>
+
+<form action="/dao-project/ItemServlet2" method="post">
+	修正：商品番号<input type="text" name="code" size="5">
+	番の値段を<input type="text" name="price" size="5">
+	に<button>変更</button>
+	<input type="hidden" name="action" value="update">
+</form>

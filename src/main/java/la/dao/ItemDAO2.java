@@ -93,7 +93,7 @@ public class ItemDAO2 {
 			 Connection con = DriverManager.getConnection(url, user, pass);
 			 // PreparedStatementオブジェクトの取得
 			 PreparedStatement st = con.prepareStatement(sql);) {
-			// 商品名と値段の指定
+			// 商品名と値段の指定：パラメータバインディング
 			st.setString(1, name);
 			st.setInt(2, price);
 			// SQLの実行
@@ -368,4 +368,39 @@ public class ItemDAO2 {
 			throw new DAOException("レコードの操作に失敗しました。");
 		} 
 	}
+	
+	
+	public int updateByPrimaryKey(int key, int price) throws DAOException {
+		// SQL文の作成
+		String sql = " UPDATE item SET price = ? WHERE code = ?";
+		
+		try (// データベースへの接続
+			 Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 主キーの指定
+			st.setInt(1, price);
+			st.setInt(2, key);
+			// SQLの実行
+			int rows = st.executeUpdate();
+			return rows;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの操作に失敗しました。");
+		} 
+	}
+	
+//	step05
+//	public List<ItemBean> findByNameAndPrice(String name, String minPrice, String maxPrice, String sort)
+//		throws DAOException {
+//		String sql = "SELECT * FROM item WHERE 1 = 1";
+//		
+//		if(name != null && name.length() != 0) {
+//			sql += "AND name like ?";
+//		}
+//		if(minPrice != null && minPrice.length() != 0) {
+//			sql += "AND prive >= ?";
+//		}
+//		
+//	}
 }

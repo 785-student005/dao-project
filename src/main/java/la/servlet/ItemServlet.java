@@ -18,8 +18,7 @@ public class ItemServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// パラメータの解析は特になし
-
+		
 		// モデルを使って全商品を取得する
 		try {
 			ItemDAO dao = new ItemDAO(); // daoにデータベースへのアクセスをやらせるためにインスタンス化

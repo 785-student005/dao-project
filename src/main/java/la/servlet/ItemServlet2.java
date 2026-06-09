@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import la.bean.ItemBean;
 import la.dao.DAOException;
 import la.dao.ItemDAO2;
@@ -61,8 +62,12 @@ public class ItemServlet2 extends HttpServlet {
 				String priceMinSt = request.getParameter("priceMin");
 				String priceMaxSt = request.getParameter("price");
 				
-
 				String name2 = request.getParameter("name2");
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("name", name2);
+				session.setAttribute("minPrice", priceMinSt);
+				session.setAttribute("maxPrice", priceMaxSt);
 				
 					
 				

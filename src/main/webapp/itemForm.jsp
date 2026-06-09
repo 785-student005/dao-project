@@ -11,7 +11,7 @@
 </form>
 
 <form action="/dao-project/ItemServlet2" method="post">
-	検索：商品名<input type="text" name="name2" size="5"> | 価格<input type="text" name="priceMin" size="5">円以上<input type="text" name="price" size="5">円以下の商品を
+	検索：商品名<input type="text" name="name2" size="5"  value = "${name}"> | 価格<input type="text" name="priceMin" size="5" value = "${minPrice}">円以上<input type="text" name="price" size="5" value = "${maxPrice}">円以下の商品を
 	<button>検索</button>
 	<input type="hidden" name="action" value="search">
 </form>

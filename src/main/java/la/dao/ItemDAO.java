@@ -12,7 +12,7 @@ import la.bean.CategoryBean;
 import la.bean.ItemBean;
 
 public class ItemDAO {
-    // URL、ユーザ名、パスワードの準備
+    // URL、ユーザ名、パスワードの準備：データベース接続情報
     private String url = "jdbc:postgresql:sample";
     private String user = "student";
     private String pass = "himitu";

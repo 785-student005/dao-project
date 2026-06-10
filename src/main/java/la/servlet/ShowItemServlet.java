@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import la.bean.CategoryBean;
 import la.bean.ItemBean;
 import la.dao.DAOException;
@@ -27,7 +26,9 @@ public class ShowItemServlet extends HttpServlet {
                 // topまたはパラメータなしの場合はトップページを表示 
                 gotoPage(request, response, "/top.jsp");
             } else if (action.equals("list")) {
+            	// リクエストパラメータの取得と型変換
                 int categoryCode = Integer.parseInt(request.getParameter("code"));
+                // DAOのインスタンス化
                 ItemDAO dao = new ItemDAO();
                 List<ItemBean> list = dao.findByCategory(categoryCode);
                 // Listをリクエストスコープに入れてJSPへフォーワードする

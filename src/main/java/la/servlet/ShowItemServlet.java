@@ -34,6 +34,24 @@ public class ShowItemServlet extends HttpServlet {
                 // Listをリクエストスコープに入れてJSPへフォーワードする
                 request.setAttribute("items", list);
                 gotoPage(request, response, "/list.jsp");
+            } else if (action.equals("detail")){
+            	// リクエストパラメータの取得と型変換
+                int code = Integer.parseInt(request.getParameter("code"));
+                // DAOのインスタンス化
+                ItemDAO dao = new ItemDAO();
+                ItemBean bean  = dao.findByPrimaryKey(code);
+                // Listをリクエストスコープに入れてJSPへフォーワードする
+                request.setAttribute("items", bean);
+                gotoPage(request, response, "/item.jsp");
+            } else if(action.equals("search")) {
+            	// リクエストパラメータの取得と型変換
+                String keyword = request.getParameter("keyword");
+                // DAOのインスタンス化
+                ItemDAO dao = new ItemDAO();
+                List<ItemBean> list = dao.findByName(keyword);
+                // Listをリクエストスコープに入れてJSPへフォーワードする
+                request.setAttribute("items", list);
+                gotoPage(request, response, "/list.jsp");
             } else {
                 request.setAttribute("message", "正しく操作してください。");
                 gotoPage(request, response, "/errInternal.jsp");

@@ -8,3 +8,9 @@
 </c:forEach>
 
 <a href="/dao-project/CartServlet?action=show">カートを見る</a>
+
+<form action="/dao-project/ShowItemServlet">
+	<input type="hidden" name="action" value="search">
+	<input type="text" name="keyword">
+	<button>検索</button>
+</form>

@@ -22,17 +22,39 @@ public class ShowItemServlet extends HttpServlet {
         try {
             // パラメータの解析
             String action = request.getParameter("action");
+            int currentPage = 1;
+            int maxPage;
+            
             if (action == null || action.length() == 0 || action.equals("top")) {
                 // topまたはパラメータなしの場合はトップページを表示 
                 gotoPage(request, response, "/top.jsp");
             } else if (action.equals("list")) {
             	// リクエストパラメータの取得と型変換
                 int categoryCode = Integer.parseInt(request.getParameter("code"));
+                
+                if(request.getParameter("page") != null) {
+                	int page = Integer.parseInt(request.getParameter("page"));
+                	currentPage = page;
+                }
+                
                 // DAOのインスタンス化
                 ItemDAO dao = new ItemDAO();
-                List<ItemBean> list = dao.findByCategory(categoryCode);
+                List<ItemBean> list = dao.findByCategory(categoryCode, currentPage);
+                int count = dao.countByCategory(categoryCode);
+                
+                if (count % 10 != 0) {
+                	maxPage = (count/10) + 1;
+                } else {
+                	maxPage = count/10;
+                }
+                
                 // Listをリクエストスコープに入れてJSPへフォーワードする
                 request.setAttribute("items", list);
+                request.setAttribute("count", count);
+                request.setAttribute("maxPage", maxPage);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("action", action);
+                request.setAttribute("code", categoryCode);
                 gotoPage(request, response, "/list.jsp");
             } else if (action.equals("detail")){
             	// リクエストパラメータの取得と型変換
@@ -46,12 +68,35 @@ public class ShowItemServlet extends HttpServlet {
             } else if(action.equals("search")) {
             	// リクエストパラメータの取得と型変換
                 String keyword = request.getParameter("keyword");
+                
+                if(request.getParameter("page") != null) {
+                	int page = Integer.parseInt(request.getParameter("page"));
+                	currentPage = page;
+                }
                 // DAOのインスタンス化
                 ItemDAO dao = new ItemDAO();
-                List<ItemBean> list = dao.findByName(keyword);
+                List<ItemBean> list = dao.findByName(keyword, currentPage);
+                int count = dao.countByName(keyword);
+                
+                
+                if (count % 10 != 0) {
+                	maxPage = (count/10) + 1;
+                } else {
+                	maxPage = count/10;
+                }
+                
+                
+                
+                
                 // Listをリクエストスコープに入れてJSPへフォーワードする
                 request.setAttribute("items", list);
+                request.setAttribute("count", count);
+                request.setAttribute("maxPage", maxPage);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("action", action);
                 gotoPage(request, response, "/list.jsp");
+//            } else if() {
+            	
             } else {
                 request.setAttribute("message", "正しく操作してください。");
                 gotoPage(request, response, "/errInternal.jsp");

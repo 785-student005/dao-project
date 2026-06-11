@@ -53,11 +53,11 @@ public class ItemDAO {
         } 
     }
 
-    public List<ItemBean> findByCategory(int categoryCode)
+    public List<ItemBean> findByCategory(int categoryCode, int currentPage)
                                                 throws DAOException {
         // SQL文の作成
         String sql =
-            "SELECT * FROM item WHERE category_code = ? ORDER BY code";
+            "SELECT * FROM item WHERE category_code = ? ORDER BY code LIMIT 10 OFFSET ?";
 		
         try (// データベースへの接続
              Connection con = DriverManager.getConnection(url, user, pass);
@@ -65,6 +65,7 @@ public class ItemDAO {
 			 PreparedStatement st = con.prepareStatement(sql);) {
 			// カテゴリの設定
 			st.setInt(1, categoryCode);
+			st.setInt(2, (currentPage - 1) * 10);
 			
 			try (// SQLの実行
 			     ResultSet rs = st.executeQuery();) {
@@ -124,9 +125,9 @@ public class ItemDAO {
     
 
     
-    public List<ItemBean> findByName(String keyword)throws DAOException {
+    public List<ItemBean> findByName(String keyword, int currentPage)throws DAOException {
     	// SQL文の作成
-    	String sql = "SELECT * FROM item WHERE name LIKE ?";
+    	String sql = "SELECT * FROM item WHERE name LIKE ? LIMIT 10 OFFSET ?";
 
     	try (// データベースへの接続
     			Connection con = DriverManager.getConnection(url, user, pass);
@@ -134,6 +135,7 @@ public class ItemDAO {
     			PreparedStatement st = con.prepareStatement(sql);) {
     		// カテゴリの設定
     		st.setString(1, "%" + keyword + "%");
+    		st.setInt(2, (currentPage - 1) * 10);
 
     		try (// SQLの実行
     				ResultSet rs = st.executeQuery();) {
@@ -156,7 +158,69 @@ public class ItemDAO {
     		e.printStackTrace();
     		throw new DAOException("レコードの取得に失敗しました。");
     	} 
-}
+    }
+    
+    public int countByCategory(int category) throws DAOException {
+        // SQL文の作成
+        String sql = "SELECT count(*) FROM item WHERE category_code = ?";
+		
+        try (// データベースへの接続
+             Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 商品番号の設定
+			st.setInt(1, category);
+			
+			try (// SQLの実行
+			     ResultSet rs = st.executeQuery();) {
+			    // 結果の取得および表示
+			    if (rs.next()) {
+			        int count = rs.getInt("count");
+			        return count; // 主キーに該当するレコードを返す
+                
+			    } else {
+			        return 0; // 主キーに該当するレコードなし
+                }
+            } catch (SQLException e) {
+			    e.printStackTrace();
+			    throw new DAOException("レコードの取得に失敗しました。");
+			}
+        } catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの取得に失敗しました。");
+        }
+    }
+    
+    public int countByName(String keyword) throws DAOException {
+        // SQL文の作成
+        String sql = "SELECT count(*) FROM item WHERE name LIKE ?";
+		
+        try (// データベースへの接続
+             Connection con = DriverManager.getConnection(url, user, pass);
+			 // PreparedStatementオブジェクトの取得
+			 PreparedStatement st = con.prepareStatement(sql);) {
+			// 商品番号の設定
+			st.setString(1, "%" + keyword + "%");
+			
+			try (// SQLの実行
+			     ResultSet rs = st.executeQuery();) {
+			    // 結果の取得および表示
+			    if (rs.next()) {
+			        int count = rs.getInt("count");
+			        return count; // 主キーに該当するレコードを返す
+                
+			    } else {
+			        return 0; // 主キーに該当するレコードなし
+                }
+            } catch (SQLException e) {
+			    e.printStackTrace();
+			    throw new DAOException("レコードの取得に失敗しました。");
+			}
+        } catch (SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("レコードの取得に失敗しました。");
+        }
+    }
     
     
 }

@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%
+ int maxPage = (Integer)request.getAttribute("maxPage");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +17,8 @@
 <jsp:include page="/menu.jsp" />
 
 <h3>商品一覧</h3>
+
+<p>${count}件の商品が存在しました</p>
 
 <c:forEach items="${items}" var="item">
     <form action="/dao-project/CartServlet?action=add" method="post">
@@ -33,6 +39,9 @@
         <button>カートに追加</button>
     </form>
 </c:forEach>
-
+<br>
+<%for (int i = 1; i <= maxPage; i++){%>
+	<a href="/dao-project/ShowItemServlet?action=${action}&keyword=${keyword}&code=${code}&page=<%=i%>"><%=i%></a>
+<%} %>
 </body>
 </html>
